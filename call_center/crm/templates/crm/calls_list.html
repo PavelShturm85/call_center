@@ -1,0 +1,157 @@
+{% extends 'crm/base.html' %} {% load widget_tweaks %} {% block content %}
+
+<div class="row">
+    <div class="col-sm-0 "></div>
+    <div class="col-sm-11 page-header" style="margin-left: 4%;">
+        <h2 class="text-center">Список звонков.</h2>
+    </div>
+    <div class="col-sm-1"></div>
+</div>
+<div class="row">
+    <div class="col-sm-0"></div>
+
+    <div class="col-sm-11 panel panel-primary" style="margin-left: 4%;">
+        {% load bootstrap3 %} {% bootstrap_pagination queryset %}
+        
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Время звонка</th>
+                    <th>Телефон</th>
+                    <th>Фамилия</th>
+                    <th>Имя</th>
+                    <th>Отчество</th>
+                    <th>Статус</th>
+                    <th>Оператор</th>
+                    <th>Исполнитель</th>
+                    <th>Статус заявки</th>
+                </tr>
+                <form action="" method="get">
+                    </br>
+                    <input class="btn btn-primary" type="submit" value="Фильтр" />
+                    <tr>
+
+                        <th>{{filter.form.date_call}}</th>
+                        <th>{{filter.form.client__phone_number}}</th>
+                        <th>{{filter.form.client__surname}}</th>
+                        <th></th>
+                        <th></th>
+                        <th>{{filter.form.disposition}}</th>
+                        <th>{{filter.form.login_name}}</th>
+                        <th>{{filter.form.executor_task}}</th>
+                        <th>{{filter.form.task_completed_identifier}}</th>
+                    </tr>
+                </form>
+            </thead>
+            <tbody class="paleblue" id="new_calls"></tbody>
+            <tbody class="paleblue">
+                {% if queryset %} 
+                    {% for call in queryset %} 
+                        {% if call.task_completed_identifier %}
+                        <tr class="success">
+                        {% elif not call.task_completed_identifier and call.status_task%}
+                        <tr class="warning">
+                        {% else %}
+                        <tr class="danger">
+                        {% endif %}
+                            <td>{{ call.date_call}}</td>
+                            <td>{{ call.client_phone}}</td>
+                            <td>{{ call.client_surname}}</td>
+                            <td>{{ call.client.name}}</td>
+                            <td>{{ call.client.patronymic}}</td>
+                            <td>
+                                {% if call.disposition == 'NO ANSWER' %} 
+                                Без ответа 
+                                {% elif call.disposition == 'ANSWERED' %} 
+                                Отвечен 
+                                {% elif call.disposition == 'OUTGOING' %} 
+                                Исходящий 
+                                {% elif call.disposition == 'OUT NO ANSWER' %} 
+                                Исх. без ответа
+                                {% endif %}
+                            </td>
+                            {% if  not  call.login_name %}
+                            <td>-------</td>
+                            {% else %}
+                            <td>{{ call.login_name}}</td>
+                            {% endif %}
+                            {% if  not  call.executor_task %}
+                            <td>-------</td>
+                            {% else %}
+                            <td>{{ call.executor_task}}</td>
+                            {% endif %}
+                            
+                            <td>
+                                {% if call.task_completed_identifier %} 
+                                Завершена 
+                                {% else %} 
+                                Не завершена 
+                                {% endif %}
+                            </td>
+                            <td class="text-center">
+                                <a class="text-info" href="{% url 'call_edit' call.id %}">
+                                    <span class="glyphicon glyphicon-pencil" style="font-size: 16px; cursor:pointer;"> </span>
+                                </a>
+                            </td>
+                        </tr>
+
+                        {% endfor %} 
+                        {% endif %}
+            </tbody>
+        </table>
+
+        {% bootstrap_pagination queryset %}
+    </div>
+
+    <div class="col-sm-1"></div>
+
+</div>
+<div class="row">
+    <div class="col-sm-0"></div>
+    <div class="col-sm-10" style="margin-left: 4%;">{{settings.VERSION}}</div>
+    <div class="col-sm-1"></div>
+</div>
+
+<script type="text/javascript">
+    var id;
+    var tbodNewCalls;
+    function newCall() {
+        $.ajax({
+            url: "{% url 'call_update' %}",
+            success: function (isData) {
+                var data = isData
+                var dataDict = { 
+                    'client_phone_number' : JSON.stringify(data.client_phone_number).replace( /"/g, "" ),
+                    'client_surname' : JSON.stringify(data.client_surname).replace( /"/g, "" ),
+                    'client_name' : JSON.stringify(data.client_name).replace( /"/g, "" ),  
+                    'call_id' : JSON.stringify(data.call_id).replace( /"/g, '' ),  
+                };
+                var ref = "edit/"
+                var refEdit = ref + dataDict.call_id
+                var trCall = ( 
+                                '<tr class="info">' +
+                                '<td>Активный звонок</td>' +
+                                '<td>' + dataDict.client_phone_number + '</td>' +
+                                '<td>' + dataDict.client_surname + '</td>' +
+                                '<td>' + dataDict.client_name + '</td>' +
+                                '<td></td>' +
+                                '<td></td>' +
+                                '<td></td>' +
+                                '<td></td>' +
+                                '<td></td>' +
+                                '<td>'+
+                                    '<a class="text-info" href="' + refEdit + '">' +
+                                        '<span class="glyphicon glyphicon-pencil" style="font-size: 16px; cursor:pointer;"> </span>' +
+                                    '</a>' +
+                                '</td>' +
+                                '</tr>'
+                             );
+                tbodNewCalls = document.getElementById("new_calls");
+                tbodNewCalls.innerHTML = trCall;
+            }  
+        });
+    }
+    id = setInterval('newCall()', 1000);
+</script>
+
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends "base.html" %} {% block content %}
+<div class="row">
+  <div class="col-sm-1 "></div>
+  <div class="col-sm-10 page-header">
+    <h2 class="text-center">Аутентификация.</h2>
+  </div>
+  <div class="col-sm-1"></div>
+</div>
+<div class="row">
+  <div class="col-sm-5"></div>
+
+  <div class="col-sm-2 panel panel-primary">
+    {% if form.errors %}
+    <p>Ваше имя пользователя и пароль не совпадают. Пожалуйста, попробуйте еще раз.</p>
+    {% endif %} {% if next %} {% if user.is_authenticated %}
+    <p>У вашей учетной записи нет доступа к этой странице. Чтобы продолжить,      войдите в систему с учетной записью, имеющей
+      доступ.
+    </p>
+    {% else %}
+    <p>Пожалуйста, войдите, чтобы увидеть эту страницу.</p>
+    {% endif %} {% endif %}
+
+    <form method="post" action="{% url 'login' %}">
+      {% csrf_token %}
+
+      <br>
+      <div>
+        <label>{{ form.username.label_tag }}</label>
+        <br> {{ form.username }}
+      </div>
+      <br>
+      <div>
+        <label>{{ form.password.label_tag }}</label>
+        <br> {{ form.password }}
+      </div>
+      <br>
+      <div>
+        <input class="btn btn-primary" type="submit" value="Войти" />
+        <input type="hidden" name="next" value="{{ next }}" />
+      </div>
+    </form>
+
+    {# Assumes you setup the password_reset view in your URLconf #}
+    <p>
+      <a href="{% url 'password_reset' %}">Забыли пароль?</a>
+    </p>
+  </div>
+  <div class="col-sm-5"></div>
+</div>
+<div class="row">
+  <div class="col-sm-1"></div>
+  <div class="col-sm-10">{{settings.VERSION}}</div>
+  <div class="col-sm-1"></div>
+</div>
+{% load bootstrap3 %} {% endblock %}

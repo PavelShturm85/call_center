@@ -1,0 +1,189 @@
+{% extends 'crm/base.html' %} {% load widget_tweaks %}{% load static %} {% block content %}
+<div class="row">
+    <div class="col-sm-1 "></div>
+    <div class="col-sm-10 page-header">
+        <h2 class="text-center">Звонок.</h2>
+    </div>
+    <div class="col-sm-1"></div>
+</div>
+<div class="row">
+    <div class="col-sm-4"></div>
+
+    <div class="col-sm-4 panel panel-primary">
+
+
+        <form action="" method="post">
+            {% csrf_token %} {% if not call.task_completed_identifier %}
+            <div class="form-group">
+                <label>Завершено</label>
+                {{ call_form.task_completed_identifier }}
+            </div>
+            <div class="form-group">
+                <label>Время звонка: </label>
+                {{ call.date_call }}
+            </div>
+            <div class="form-group">
+                <label>Номер телефона:</label>
+                {{ call.client.phone_number }}
+            </div>
+            <div class="form-group">
+                <label>Длительность разговора: </label>
+                {{ call.call_duration }}
+            </div>
+            <div class="form-group">
+                <label>Статус звонка: </label>
+                {% if call.disposition == 'NO ANSWER' %}
+                 Без ответа 
+                 {% elif call.disposition == 'ANSWERED' %} 
+                 Отвечен 
+                 {% elif call.disposition == 'OUTGOING' %} 
+                 Исходящий 
+                 {% elif call.disposition == 'OUT NO ANSWER' %} 
+                 Исх. без ответа 
+                 {% endif %}
+            </div>
+            <div class="form-group">
+                <label>Запись разговора</label>
+                {% if call.file_name %}
+                <audio controls>
+                    {% if call.disposition == 'NO ANSWER' %}
+                    <source src="{{settings.PATH_TO_ANSWERING_MACHINE}}{{ call.file_name }}" type="audio/wav"> {% else %}
+                    <source src="{{settings.PATH_TO_CALLS}}{{ call.path_to_file_with_name }}" type="audio/wav"> {% endif %}
+                </audio>
+                {% endif %}
+            </div>
+
+
+
+            <div class="form-group">
+                <label>Фамилия</label>
+                <br>{{ client_form.surname }}
+            </div>
+            <div class="form-group">
+                <label>Имя</label>
+                <br>{{ client_form.name }}
+            </div>
+            <div class="form-group">
+                <label>Отчество</label>
+                <br>{{ client_form.patronymic }}
+            </div>
+
+
+            <div class="form-group">
+                <label>Коментарий о клиенте</label>
+                <br>{{ client_form.coment }}
+            </div>
+            <div class="form-group">
+                <label>Тип проблемы</label>
+                {{ call_form.type_task }}
+            </div>
+            <div class="form-group">
+                <label>Описание проблемы</label>
+                <br>{{ call_form.description_task }}
+            </div>
+            <div class="form-group">
+                <label>Исполнитель</label>
+                {{ call_form.executor_task }}
+            </div>
+            <div class="row">
+                <div class="col-xs-3">
+                    <input type="submit" class="btn btn-primary" value="Сохранить" /> </div>
+                <div class="col-xs-4">
+                    <a href="{% url 'calls_list' %}" class="btn btn-danger">К списку звонков</a>
+                </div>
+                <div class="col-xs-5">
+                    {% if call.file_name %}
+                    <a href="{% url 'log_call' call.id %}" class="btn btn-warning">К истории изменений</a>
+                    {% endif %}
+                </div>
+            </div>
+            <p> </p>
+            {% else %}
+            <div class="form-group">
+                <label>Завершено</label>
+                <span class="col-md-6 glyphicon glyphicon-ok text-success"></span>
+            </div>
+            <div class="form-group">
+                <label>Время звонка: </label>
+                {{ call.date_call }}
+            </div>
+            <div class="form-group">
+                <label>Номер телефона:</label>
+                {{ call.client.phone_number }}
+            </div>
+            <div class="form-group">
+                <label>Длительность разговора: </label>
+                {{ call.call_duration }}
+            </div>
+            <div class="form-group">
+                <label>Статус звонка: </label>
+                {% if call.disposition == 'NO ANSWER' %} 
+                Без ответа 
+                {% elif call.disposition == 'ANSWERED' %} 
+                Отвечен {% elif call.disposition == 'OUTGOING' %} 
+                Исходящий 
+                {% elif call.disposition == 'OUT NO ANSWER' %} 
+                Исх. без ответа 
+                {% endif %}
+            </div>
+            <div class="form-group">
+                <label>Запись разговора</label>
+                {% if call.file_name %}
+                <audio controls>
+                    {% if call.disposition == 'NO ANSWER' %}
+                    <source src="{{settings.PATH_TO_ANSWERING_MACHINE}}{{ call.file_name }}" type="audio/wav"> {% else %}
+                    <source src="{{settings.PATH_TO_CALLS}}{{ call.path_to_file_with_name }}" type="audio/wav"> {% endif %}
+                </audio>
+                {% endif %}
+            </div>
+
+
+
+            <div class="form-group">
+                <label>Фамилия</label>
+                <br>{{ call.client.surname }}
+            </div>
+            <div class="form-group">
+                <label>Имя</label>
+                <br>{{ call.client.name }}
+            </div>
+            <div class="form-group">
+                <label>Отчество</label>
+                <br>{{ call.client.patronymic }}
+            </div>
+            <div class="form-group">
+                <label>Коментарий о клиенте</label>
+                <br>{{ call.client.coment }}
+            </div>
+            <div class="form-group">
+                <label>Тип проблемы</label>
+                {{ call.client.type_task }}
+            </div>
+            <div class="form-group">
+                <label>Описание проблемы</label>
+                <br>{{ call.client.description_task }}
+            </div>
+            <div class="form-group">
+                <label>Исполнитель</label>
+                {{ call.client.executor_task }}
+            </div>
+
+            <a href="{% url 'calls_list' %}" class="btn btn-danger">К списку звонков</a>
+            {% if call.file_name %}
+            <a href="{% url 'log_call' call.id %}" class="btn btn-warning">К истории изменений</a>
+            {% endif %}
+            <p></p>
+            {% endif %}
+        </form>
+
+
+    </div>
+    <div class="col-sm-4"></div>
+
+</div>
+<div class="row">
+    <div class="col-sm-1"></div>
+    <div class="col-sm-10">{{settings.VERSION}}</div>
+    <div class="col-sm-1"></div>
+</div>
+{% load bootstrap3 %} {% endblock %}

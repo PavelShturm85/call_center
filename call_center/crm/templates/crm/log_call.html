@@ -1,0 +1,69 @@
+{% extends 'crm/base.html' %} {% load widget_tweaks %} {% block content %}
+
+<div class="row">
+    <div class="col-sm-0 "></div>
+    <div class="col-sm-11 page-header" style="margin-left: 4%;">
+        <h2 class="text-center">История изменений.</h2>
+    </div>
+    <div class="col-sm-1"></div>
+</div>
+<div class="row">
+    <div class="col-sm-0"></div>
+
+    <div class="col-sm-11 panel panel-primary" style="margin-left: 4%;">
+        {% load bootstrap3 %} {% comment %} {% bootstrap_pagination log_call %} {% endcomment %}
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Время изменения</th>
+                    <th>Редактор записи</th>
+                    <th>Исполнитель</th>
+                    <th>Тип проблемы</th>
+                    <th>Описание проблемы</th>
+                </tr>
+            </thead>
+            <tbody class="paleblue">
+                {% if log_call %} 
+                {% for log in log_call %}
+                <tr>
+                    <td>{{ log.log_time}}</td>
+                    <td>{{ log.user_changed_record}}</td>
+                    {% if  not log.old_executor_task %}
+                    <td></td>
+                    {% else %}
+                    <td>{{ log.old_executor_task}}</td>
+                    {% endif %}
+                    {% if  not log.old_type_task %}
+                    <td></td>
+                    {% else %}
+                    <td>{{ log.old_type_task}}</td>
+                    {% endif %}
+                    {% if  not log.old_description_task %}
+                    <td></td>
+                    {% else %}
+                    <td>{{ log.old_description_task}}</td>
+                    {% endif %}
+
+                </tr>
+                {% endfor %} 
+                {% endif %}
+            </tbody>
+        </table>
+        <a href="{% url 'calls_list' %}" class="btn btn-danger">К списку звонков</a>
+        <p></p>
+
+        {% comment %} {% bootstrap_pagination log_call %} {% endcomment %}
+    </div>
+
+    <div class="col-sm-1"></div>
+
+</div>
+<div class="row">
+    <div class="col-sm-0"></div>
+    <div class="col-sm-11" style="margin-left: 4%;">{{settings.VERSION}}</div>
+    <div class="col-sm-1"></div>
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>МедЗаказ-CRM</title>
+    <!-- Bootstrap -->
+    {% load bootstrap3 %}
+    <script src="{% bootstrap_jquery_url %}"></script> {% bootstrap_javascript %} {% bootstrap_css %}
+</head>
+
+<body>
+        <nav class="navbar navbar-default navbar-fixed-top  navbar-inverse" role="navigation" style="position: -webkit-sticky; position: sticky; top: 0;">
+                <div class="col-sm-0 "></div>  
+                <div class="container col-sm-11" style="margin-left: 4%;">
+                    <div class="navbar-header">
+                        <a class="navbar-brand" href="#">МедЗаказ-CRM</a>
+                    </div>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a class="navbar-brand" href="#">Здравствуйте! {{ request.user }}, тел.: {{ request.user.phone_number_local }}</a></li>
+                        <li><a href="{% url 'logout' %}">Выход</a></li>
+                    </ul>  
+                </div>
+                <div class="col-sm-1 "></div>
+            </nav>
+    
+    
+            {% block content %} {% endblock %}
+        
+</body>
+<script type="text/javascript">
+    var id;
+
+    function show() {
+        $.ajax({
+            url: "{% url 'activity_users' %}",
+            cache: false,
+            
+        });
+    }
+
+    id = setInterval('show()', 50000);
+
+</script>
+</html>

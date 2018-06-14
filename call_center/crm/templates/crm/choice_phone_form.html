@@ -1,0 +1,32 @@
+{% extends 'base.html' %} {% load widget_tweaks %} {% block content %}
+
+<div class="row">
+        <div class="col-sm-1 "></div>
+        <div class="col-sm-10 page-header">
+                <h2 class="text-center">Аутентификация.</h2>
+        </div>
+        <div class="col-sm-1"></div>
+</div>
+<div class="row">
+        <div class="col-sm-5"></div>
+
+        <div class="col-sm-2 panel panel-primary">
+                <form action="" method="post">
+                        {% csrf_token %}
+                        <br>
+                        <div class="form-group">
+                                <label>Номер телефона</label>
+                                {{ choice_phone_form.phone_number_local }}
+                        </div>
+                        <input type="submit" class="btn btn-primary" value="Сохранить" />
+                        <p></p>
+                </form>
+        </div>
+        <div class="col-sm-5"></div>
+</div>
+<div class="row">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-10">{{settings.VERSION}}</div>
+        <div class="col-sm-1"></div>
+</div>
+{% load bootstrap3 %} {% endblock %}
