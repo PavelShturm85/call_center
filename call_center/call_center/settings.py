@@ -184,7 +184,6 @@ PATH_TO_ANSWERING_MACHINE = os.path.join(STATIC_URL, "files/0080/INBOX/")
 PATH_TO_CALLS = os.path.join(STATIC_URL, "files/monitor/")
 MAIL_PATH_TO_ANSWERING_MACHINE = os.path.join(BASE_DIR, "crm/static/files/0080/INBOX/")
 MAIL_PATH_TO_CALLS = os.path.join(BASE_DIR, "crm/static/files/monitor/")
-PATH_TO_PROJECT = BASE_DIR
 ACTIV_CALL_URL = 'https://192.168.34.203/c2c/conversations.php?act=get'
 CALL_HISTORY_URL = 'https://192.168.34.203/c2c/cdr.php?limit=0,200'
 GROUP_PHONE_NUMBER_URL = 'https://192.168.34.203/c2c/get_group_members.php'

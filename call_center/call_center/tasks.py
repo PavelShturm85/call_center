@@ -7,10 +7,10 @@ try:
     import configparser
 except ImportError:
     import ConfigParser as configparser
-# при запуске на сервере - изменить путь 'settings.PATH_TO_PROJECT' до проекта
+# при запуске на сервере - изменить путь 'settings.BASE_DIR' до проекта
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 from django.conf import settings
-sys.path.append(settings.PATH_TO_PROJECT)
+sys.path.append(settings.BASE_DIR)
 import django
 django.setup()
 from crm.models import Call, Client, User
