@@ -63,7 +63,7 @@ ROOT_URLCONF = 'call_center.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['./call_center/templates', ],
+        'DIRS': ["{}/call_center/templates/".format(BASE_DIR), ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -92,10 +92,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'crm_medzakaz',
-        'USER' : 'crm_user',
-        'PASSWORD' : 'Qw12345%',
-        'HOST' : '127.0.0.1',
-        'PORT' : '5432',
+        'USER': 'crm_user',
+        'PASSWORD': 'Qw12345%',
+        'HOST': 'db',
+        'PORT': '5432',
     }
 }
 # Password validation
@@ -182,7 +182,8 @@ SESSION_COOKIE_AGE = 40000
 # paths to tasks.py and watcher.py
 PATH_TO_ANSWERING_MACHINE = os.path.join(STATIC_URL, "files/0080/INBOX/")
 PATH_TO_CALLS = os.path.join(STATIC_URL, "files/monitor/")
-MAIL_PATH_TO_ANSWERING_MACHINE = os.path.join(BASE_DIR, "crm/static/files/0080/INBOX/")
+MAIL_PATH_TO_ANSWERING_MACHINE = os.path.join(
+    BASE_DIR, "crm/static/files/0080/INBOX/")
 MAIL_PATH_TO_CALLS = os.path.join(BASE_DIR, "crm/static/files/monitor/")
 ACTIV_CALL_URL = 'https://192.168.34.203/c2c/conversations.php?act=get'
 CALL_HISTORY_URL = 'https://192.168.34.203/c2c/cdr.php?limit=0,200'

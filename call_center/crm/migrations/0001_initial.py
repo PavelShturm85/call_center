@@ -18,45 +18,65 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Call',
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('date_call', models.DateTimeField(blank=True, null=True, verbose_name='Время звонка')),
-                ('call_duration', models.CharField(blank=True, max_length=20, null=True, verbose_name='Длительность звонка')),
-                ('file_name', models.CharField(blank=True, max_length=100, null=True, verbose_name='Файл с записью')),
-                ('disposition', models.CharField(blank=True, choices=[('ANSWERED', 'Отвечен'), ('NO ANSWER', 'Без ответа'), ('OUTGOING', 'Исходящий'), ('OUT NO ANSWER', 'Исх. без ответа')], max_length=10, null=True, verbose_name='Статус звонка')),
-                ('type_task', models.CharField(blank=True, max_length=50, null=True, verbose_name='Тип проблемы')),
-                ('description_task', models.TextField(blank=True, null=True, verbose_name='Описание прорблемы')),
-                ('dst_phone_number', models.CharField(max_length=12, verbose_name='Номер телефона куда звонили')),
-                ('unique_id', models.CharField(max_length=50, verbose_name='Идентификатор активного звонка и истории')),
-                ('task_completed_identifier', models.BooleanField(default=False, verbose_name='Идентификатор завершенной задачи')),
-                ('status_task', models.BooleanField(default=False, verbose_name='Статус проблемы обработана/необработана')),
-                ('is_end', models.BooleanField(default=False, verbose_name='Завершен ли разговор')),
-                ('is_get_history', models.BooleanField(default=False, verbose_name='Получена ли история звонка')),
+                ('id', models.UUIDField(default=uuid.uuid4,
+                                        editable=False, primary_key=True, serialize=False)),
+                ('date_call', models.DateTimeField(
+                    blank=True, null=True, verbose_name='Время звонка')),
+                ('call_duration', models.CharField(blank=True, max_length=20,
+                                                   null=True, verbose_name='Длительность звонка')),
+                ('file_name', models.CharField(blank=True, max_length=100,
+                                               null=True, verbose_name='Файл с записью')),
+                ('disposition', models.CharField(blank=True, choices=[('ANSWERED', 'Отвечен'), ('NO ANSWER', 'Без ответа'), (
+                    'OUTGOING', 'Исходящий'), ('OUT NO ANSWER', 'Исх. без ответа')], max_length=10, null=True, verbose_name='Статус звонка')),
+                ('type_task', models.CharField(blank=True,
+                                               max_length=50, null=True, verbose_name='Тип проблемы')),
+                ('description_task', models.TextField(blank=True,
+                                                      null=True, verbose_name='Описание прорблемы')),
+                ('dst_phone_number', models.CharField(
+                    max_length=12, verbose_name='Номер телефона куда звонили')),
+                ('unique_id', models.CharField(max_length=50,
+                                               verbose_name='Идентификатор активного звонка и истории')),
+                ('task_completed_identifier', models.BooleanField(
+                    default=False, verbose_name='Идентификатор завершенной задачи')),
+                ('status_task', models.BooleanField(default=False,
+                                                    verbose_name='Статус проблемы обработана/необработана')),
+                ('is_end', models.BooleanField(
+                    default=False, verbose_name='Завершен ли разговор')),
+                ('is_get_history', models.BooleanField(
+                    default=False, verbose_name='Получена ли история звонка')),
             ],
         ),
         migrations.CreateModel(
             name='Client',
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('phone_number', models.CharField(max_length=12, verbose_name='Номер телефона с которого звонили')),
-                ('surname', models.CharField(max_length=30, verbose_name='Фамилия клиента')),
+                ('id', models.UUIDField(default=uuid.uuid4,
+                                        editable=False, primary_key=True, serialize=False)),
+                ('phone_number', models.CharField(max_length=12,
+                                                  verbose_name='Номер телефона с которого звонили')),
+                ('surname', models.CharField(
+                    max_length=30, verbose_name='Фамилия клиента')),
                 ('name', models.CharField(max_length=30, verbose_name='Имя клиента')),
-                ('patronymic', models.CharField(max_length=30, verbose_name='Отчество клиента')),
+                ('patronymic', models.CharField(
+                    max_length=30, verbose_name='Отчество клиента')),
                 ('coment', models.TextField(blank=True, verbose_name='Комментарий')),
             ],
         ),
         migrations.AddField(
             model_name='call',
             name='client',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='crm.Client'),
+            field=models.ForeignKey(
+                blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='crm.Client'),
         ),
         migrations.AddField(
             model_name='call',
             name='executor_task',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='executor_task', to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE,
+                                    related_name='executor_task', to=settings.AUTH_USER_MODEL),
         ),
         migrations.AddField(
             model_name='call',
             name='login_name',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='login_name', to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE,
+                                    related_name='login_name', to=settings.AUTH_USER_MODEL),
         ),
     ]

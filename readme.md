@@ -24,3 +24,54 @@ $ python call_center/watcher.py
 ```
 $ python manage.py runserver
 ```
+
+## Команды для работы с докером.
+```
+$ sudo docker-compose up 
+```
+* в директории с docker-compose.yml
+происать эту команду. Запускает сервисы прописанные в компосе и
+если не обнаруживает image/замечает изменения в Dockerfileах
+билдит новые имаджи и запускает их контейнеры
+
+```
+$ sudo docker image ls
+```
+* Показывает все имаджи в реестре компьютера
+
+```
+$ sudo docker container ls
+```
+* Показывает все запущенные контейнеры в реестре компьютера
+
+```
+$ sudo docker container rm <container name|id>
+```
+* Удаляет контейнер с указанным айди или неймом
+
+```
+$ sudo docker image rmi --force <image name|id>
+```
+* Удаляет имадж с указанным айди или неймом, вместе с контейнером
+
+```
+$ sudo docker-compose ps
+```
+* Просмотреть запущенные сервисы docker-compose
+
+```
+$ sudo docker-compose rm <id|name>
+```
+* удалить запущенные службы докер-компос
+* --all - удаляет все службы
+
+```
+$ sudo docker exec <id container> bash
+```
+* Зайти внутрь запущенного контейнера докера, через его id
+
+```
+$ docker run -ti -p <host_port>:<in_container_host> <container_name>
+```
+* Запускает контейнер с укзанным именем, привязывая порт компьютера к порту 
+* внутри запущенного контейнера докера

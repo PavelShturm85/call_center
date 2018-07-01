@@ -86,7 +86,7 @@ class CallEdit(TemplateView):
                     request
                 )
             call.save()
-            if call.executor_task.send_email:
+            if call.executor_task and call.executor_task.send_email:
                 send_email(
                     call.executor_task.email,
                     call.type_task,

@@ -1,0 +1,29 @@
+version: '2'
+
+services:
+
+  runserver_crm:
+    build:
+      context: ../
+      dockerfile: docker/runserver/runserver.Dockerfile
+    image: runserver_crm
+    depends_on:
+      - db
+    ports:
+      - 8102:8101
+    volumes:
+      - /crm
+    restart: always
+
+  db:
+    build:
+      context: ../
+      dockerfile: docker/postgres/postgres.Docerfile
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=Qw12345%
+      - POSTGRES_USER=crm_user
+      - POSTGRES_DB=crm_medzakaz
+    volumes:
+      - /var/lib/postgresql/data:/var/lib/postgresql/data
+    restart: always
