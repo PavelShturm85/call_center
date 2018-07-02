@@ -10,6 +10,6 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y  \
 
 RUN pip install -r requirements.txt
 
-ENV NAME celery_worker
+ENV NAME watchdog
 
-CMD ["python", "docker/celery_worker/run.py"]
+CMD ["python", "docker/watchdog/run.py"]

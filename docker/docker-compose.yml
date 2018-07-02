@@ -6,24 +6,53 @@ services:
     build:
       context: ../
       dockerfile: docker/runserver/runserver.Dockerfile
-    image: runserver_crm
     depends_on:
       - db
+      - redis
     ports:
       - 8102:8101
     volumes:
       - /crm
     restart: always
 
-  db:
+  celery_worker:
     build:
       context: ../
-      dockerfile: docker/postgres/postgres.Docerfile
-    image: postgres
+      dockerfile: docker/celery_worker/celery_worker.Dockerfile
+    depends_on:
+      - db
+      - redis
+    restart: always
+
+  celery_beat:
+    build:
+      context: ../
+      dockerfile: docker/celery_beat/celery_beat.Dockerfile
+    depends_on:
+      - db
+      - redis
+    restart: always
+
+  watchdog:
+    build:
+      context: ../
+      dockerfile: docker/watchdog/watchdog.Dockerfile
+    depends_on:
+      - db
+    volumes:
+      - /crm/call_center/crm/static/files:/crm/call_center/crm/static/files
+    restart: always
+
+  db:
+    image: postgres:10.4-alpine
     environment:
       - POSTGRES_PASSWORD=Qw12345%
       - POSTGRES_USER=crm_user
       - POSTGRES_DB=crm_medzakaz
     volumes:
       - /var/lib/postgresql/data:/var/lib/postgresql/data
+    restart: always
+
+  redis:
+    image: redis:4.0.10-alpine
     restart: always
