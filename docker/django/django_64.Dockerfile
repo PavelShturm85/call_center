@@ -3,6 +3,7 @@ FROM python:3.5-jessie
 WORKDIR /crm
 
 ADD . /crm
+ADD /conf/local_settings/local_settings_64.py /crm/call_center/call_center/local_settings.py
 
 RUN apt-get update && apt-get upgrade -y && apt-get install -y  \
     --no-install-recommends apt-utils \
@@ -10,8 +11,8 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y  \
 
 RUN pip install -r requirements.txt
 
-EXPOSE 8101
+EXPOSE 3031
 
 ENV NAME crm
 
-CMD ["python", "docker/runserver/run.py"]
+CMD ["python", "docker/django/run.py"]

@@ -94,7 +94,7 @@ DATABASES = {
         'NAME': 'crm_medzakaz',
         'USER': 'crm_user',
         'PASSWORD': 'Qw12345%',
-        'HOST': 'db',
+        'HOST': 'localhost',
         'PORT': '5432',
     }
 }
@@ -141,8 +141,8 @@ LOGIN_REDIRECT_URL = '/choice_phone/'
 CELERY_IMPORTS = (
     'call_center.tasks',
 )
-CELERY_BROKER_URL = 'redis://redis:6379'
-CELERY_RESULT_BACKEND = 'redis://redis:6379'
+CELERY_BROKER_URL = 'redis://localhost:6379'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
@@ -180,15 +180,21 @@ SESSION_COOKIE_AGE = 40000
 
 
 # paths to tasks.py and watcher.py
+IP = "192.168.34.203"
 PATH_TO_ANSWERING_MACHINE = os.path.join(STATIC_URL, "files/0080/INBOX/")
 PATH_TO_CALLS = os.path.join(STATIC_URL, "files/monitor/")
 MAIL_PATH_TO_ANSWERING_MACHINE = os.path.join(
     BASE_DIR, "crm/static/files/0080/INBOX/")
 MAIL_PATH_TO_CALLS = os.path.join(BASE_DIR, "crm/static/files/monitor/")
-ACTIV_CALL_URL = 'https://192.168.34.203/c2c/conversations.php?act=get'
-CALL_HISTORY_URL = 'https://192.168.34.203/c2c/cdr.php?limit=0,200'
-GROUP_PHONE_NUMBER_URL = 'https://192.168.34.203/c2c/get_group_members.php'
+ACTIV_CALL_URL = 'https://{}/c2c/conversations.php?act=get'.format(IP)
+CALL_HISTORY_URL = 'https://{}/c2c/cdr.php?limit=0,200'.format(IP)
+GROUP_PHONE_NUMBER_URL = 'https://{}/c2c/get_group_members.php'.format(IP)
 NAME_GROUP_PHONE_NUMBER = 'QUEUE'
 
 # version
 VERSION = "© 2017, 2018 - МедЗаказ - CRM - Версия: 2018.6"
+
+try:
+    from .local_settings import *
+except:
+    pass

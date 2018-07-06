@@ -1,0 +1,59 @@
+version: '2'
+
+services:
+
+  celery_worker:
+    build:
+      context: ../
+      dockerfile: docker/django/django_30.Dockerfile
+    command: python docker/celery_worker/run.py
+    depends_on:
+      - redis
+    restart: always
+
+  celery_beat:
+    build:
+      context: ../
+      dockerfile: docker/django/django_30.Dockerfile
+    command: python docker/celery_beat/run.py
+    depends_on:
+      - redis
+    restart: always
+
+  watchdog:
+    build:
+      context: ../
+      dockerfile: docker/django/django_30.Dockerfile
+    command: python docker/watchdog/run.py 
+    volumes_from:
+      - django
+    restart: always
+
+  redis:
+    image: redis:4.0.10-alpine
+    restart: always
+
+  nginx:
+    container_name: nginx-container
+    links:
+      - django
+    build: 
+      context: ../
+      dockerfile: docker/nginx/nginx.Dockerfile
+    ports:
+      - 80:80
+      - 443:443
+    volumes_from:
+      - django
+    restart: always
+      
+  django:
+    build:
+      context: ../
+      dockerfile: docker/django/django_30.Dockerfile
+    depends_on:
+      - redis
+    volumes:
+      - /crm
+      - /static/files:/crm/call_center/crm/static/files
+    restart: always

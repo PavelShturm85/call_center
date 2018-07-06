@@ -5,8 +5,7 @@ cache
 media
 .idea
 .env
-files
-logs
+*.log
 *.wav
 __pycache__
 .DS_Store

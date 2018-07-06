@@ -21,8 +21,8 @@ from django.utils import timezone
 @login_required(login_url='/accounts/login/')
 def call_list(request):
     call_list = Call.objects.all().order_by('-date_call')
-    filter = CallsFilter(request.GET, queryset=call_list)
-    paginator = Paginator(filter.qs, 20)
+    form = CallsFilter(request.GET, queryset=call_list)
+    paginator = Paginator(form.qs, 20)
     page = request.GET.get('page')
 
     try:
@@ -37,7 +37,7 @@ def call_list(request):
     return render_to_response(
         'crm/calls_list.html', {
             'queryset': calls,
-            'filter': filter,
+            'filter': form,
             'request': request,
             'settings': settings,
         }

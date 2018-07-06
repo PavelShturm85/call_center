@@ -3,6 +3,7 @@ FROM python:3.5-jessie
 WORKDIR /crm
 
 ADD . /crm
+ADD /conf/local_settings/local_settings_30.py /crm/call_center/call_center/local_settings.py
 
 RUN apt-get update && apt-get upgrade -y && apt-get install -y  \
     --no-install-recommends apt-utils \
@@ -10,6 +11,8 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y  \
 
 RUN pip install -r requirements.txt
 
-ENV NAME celery_beat
+EXPOSE 3031
 
-CMD ["python", "docker/celery_beat/run.py"]
+ENV NAME crm
+
+CMD ["python", "docker/django/run.py"]

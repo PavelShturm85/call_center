@@ -1,0 +1,75 @@
+version: '2'
+
+services:
+
+  celery_worker:
+    build:
+      context: ../
+      dockerfile: docker/django/django_test.Dockerfile
+    command: python docker/celery_worker/run.py
+    depends_on:
+      - db
+      - redis
+    restart: always
+
+  celery_beat:
+    build:
+      context: ../
+      dockerfile: docker/django/django_test.Dockerfile
+    command: python docker/celery_beat/run.py
+    depends_on:
+      - db
+      - redis
+    restart: always
+
+  watchdog:
+    build:
+      context: ../
+      dockerfile: docker/django/django_test.Dockerfile
+    command: python docker/watchdog/run.py 
+    depends_on:
+      - db
+    volumes_from:
+      - django
+    restart: always
+
+  db:
+    image: postgres:9.5-alpine
+    environment:
+      - POSTGRES_PASSWORD=Qw12345%
+      - POSTGRES_USER=crm_user
+      - POSTGRES_DB=crm_medzakaz
+    volumes:
+      - /var/lib/postgresql/data:/var/lib/postgresql/data
+    restart: always
+
+  redis:
+    image: redis:4.0.10-alpine
+    restart: always
+
+  nginx:
+    container_name: nginx-container
+    links:
+      - django
+    build: 
+      context: ../
+      dockerfile: docker/nginx/nginx.Dockerfile
+    ports:
+      - 80:80
+      - 443:443
+    volumes_from:
+      - django
+    restart: always
+      
+  django:
+    build:
+      context: ../
+      dockerfile: docker/django/django_test.Dockerfile
+    depends_on:
+      - db
+      - redis
+    volumes:
+      - /crm
+      - /usr/local/lib/python3.5/site-packages/django/
+      - /static/files:/crm/call_center/crm/static/files
+    restart: always
