@@ -70,5 +70,6 @@ services:
       - redis
     volumes:
       - /crm
-      - /static/files:/crm/call_center/crm/static/files
+      - /usr/local/lib/python3.5/site-packages/django/
+      - /home/server/asterisk_media/monitor:/crm/call_center/crm/static/files/monitor
     restart: always

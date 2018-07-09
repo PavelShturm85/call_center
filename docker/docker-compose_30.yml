@@ -55,5 +55,7 @@ services:
       - redis
     volumes:
       - /crm
-      - /static/files:/crm/call_center/crm/static/files
+      - /usr/local/lib/python3.5/site-packages/django/
+      - /mnt/disk/16b225cd-f7fe-464f-9344-0e59ce397f8c/monitor:/crm/call_center/crm/static/files/monitor
+      - /mnt/disk/16b225cd-f7fe-464f-9344-0e59ce397f8c/voicemail/default/0080:/crm/call_center/crm/static/files/0080
     restart: always

@@ -1,7 +1,11 @@
+import os
+import django
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'call_center.settings')
+django.setup()
 import time
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler, FileSystemEvent
-from tasks import SaveAnsweringMachineCalls
+from call_center.tasks import SaveAnsweringMachineCalls
 from django.conf import settings
 try:
     import configparser
