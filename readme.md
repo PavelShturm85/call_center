@@ -1,3 +1,4 @@
+
 # Django-приложение для колл центра
 
 ## Приложение:
@@ -23,7 +24,7 @@ $ python manage.py runserver
 ```
 
 ### Команды для работы с докером.
-
+```
 sudo docker-compose -f docker-compose_<регион>.yml up -d
 ```
 * создает контейнеры из конфигурационного файла и запускает их, без вывода лога в терминал.
@@ -79,4 +80,62 @@ $ docker run -ti -p <host_port>:<in_container_host> <container_name>
 ```
 * Запускает контейнер с укзанным именем, привязывая порт компьютера к порту 
 * внутри запущенного контейнера докера
+
+
+## Деплой:
+1) Установить Ubuntu 16.04.
+
+2) Установить git.
+```
+$ sudo apt-get install git
+```
+3) Установить docker и docker-compose.
+```
+$ sudo apt-get update
+
+$ sudo apt-get install \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    software-properties-common
+
+$ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+
+$ sudo apt-key fingerprint 0EBFCD88
+
+$ sudo add-apt-repository \
+   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+   $(lsb_release -cs) \
+   stable"
+
+$ sudo apt-get update
+
+$ sudo apt-get install docker-ce
+
+$ sudo curl -L https://github.com/docker/compose/releases/download/1.22.0/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
+
+$ sudo chmod +x /usr/local/bin/docker-compose
+```
+4) Скачивание и запуск приложение:
+```
+$ cd /path/to/progect
+
+$ git clone "REPO"
+
+$ cd /path/to/progect/docker
+
+$ sudo docker-compose -f docker-compose_<регион>.yml up -d
+
+``` 
+## Обновление:
+
+```
+$ cd /path/to/progect/docker
+
+$ sudo docker-compose -f docker-compose_<регион>.yml down --rmi all
+
+$ git pull
+
+$ sudo docker-compose -f docker-compose_<регион>.yml up -d
+```
 
