@@ -33,7 +33,6 @@ ALLOWED_HOSTS = []
 AUTH_USER_MODEL = 'users.User'
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -122,7 +121,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'ru-RU'
 
-TIME_ZONE = 'Europe/Saratov'
+TIME_ZONE = 'Europe/Samara'
 
 USE_I18N = True
 
@@ -148,17 +147,8 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = TIME_ZONE
 CELERY_ENABLE_UTC = False
+# Подключение задачи селери.
 CELERY_BEAT_SCHEDULE = {
-    'task-get_activ_call': {
-        'task': 'call_center.tasks.get_activ_call',
-        'schedule': 1.0,
-        # 'args': (*args)
-    },
-    'task-get_call_history': {
-        'task': 'call_center.tasks.get_call_history',
-        'schedule': 2.0,
-        # 'args': (*args)
-    },
     'task-del_group_phone_number': {
         'task': 'call_center.tasks.del_group_phone_number',
         'schedule': 60.0,
@@ -179,22 +169,35 @@ SESSION_COOKIE_AGE = 40000
 # SESSION_SAVE_EVERY_REQUEST = True
 
 
-# paths to tasks.py and watcher.py
-IP = "192.168.34.203"
-PATH_TO_ANSWERING_MACHINE = os.path.join(STATIC_URL, "files/0080/INBOX/")
-PATH_TO_CALLS = os.path.join(STATIC_URL, "files/monitor/")
-MAIL_PATH_TO_ANSWERING_MACHINE = os.path.join(
-    BASE_DIR, "crm/static/files/0080/INBOX/")
-MAIL_PATH_TO_CALLS = os.path.join(BASE_DIR, "crm/static/files/monitor/")
-ACTIV_CALL_URL = 'https://{}/c2c/conversations.php?act=get'.format(IP)
-CALL_HISTORY_URL = 'https://{}/c2c/cdr.php?limit=0,200'.format(IP)
-GROUP_PHONE_NUMBER_URL = 'https://{}/c2c/get_group_members.php'.format(IP)
-NAME_GROUP_PHONE_NUMBER = 'QUEUE'
+# asterisk
+# IP = "192.168.4.203" # саратов
+IP = "192.168.34.203"  # астрахань
+ASTER_USER = 'powcrmami'
+ASTER_PASS = 'zimoisnegidet32'
 
-# version
-VERSION = "© 2017, 2018 - МедЗаказ - CRM - Версия: 2018.6"
+# Пути к аудиофайлам.
+DIR_ANSWERING_MACHINE_FILES = "0080/INBOX/"
+
+PATH_TO_CALLS = os.path.join(STATIC_URL, "files/monitor/")
+
+MAIL_PATH_TO_CALLS = os.path.join(BASE_DIR, "crm/static/files/monitor/")
+
+# Группа номеров.
+# NAME_GROUP_PHONE_NUMBER = 'GROUP' # саратов
+NAME_GROUP_PHONE_NUMBER = 'QUEUE'  # астрахань
+
+# Версия.
+VERSION = "© 2017, 2018 - МедЗаказ - CRM - Версия: 2018.08.14"
 
 try:
     from .local_settings import *
 except:
     pass
+
+# Константы формируются после импорта локальных настроек.
+# Для добавления в local_settings.py - расположить выше импорта локальных настроек.
+GROUP_PHONE_NUMBER_URL = 'https://{}/c2c/get_group_members.php'.format(IP)
+PATH_TO_ANSWERING_MACHINE = os.path.join(
+    STATIC_URL, "files/", DIR_ANSWERING_MACHINE_FILES)
+MAIL_PATH_TO_ANSWERING_MACHINE = os.path.join(
+    BASE_DIR, "crm/static/files/", DIR_ANSWERING_MACHINE_FILES)

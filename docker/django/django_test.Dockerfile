@@ -4,6 +4,7 @@ WORKDIR /crm
 
 ADD . /crm
 ADD /conf/local_settings/local_settings_test.py /crm/call_center/call_center/local_settings.py
+ADD /event_watcher/event_watcher_test.py /crm/call_center/event_watcher.py
 
 RUN apt-get update && apt-get upgrade -y && apt-get install -y  \
     --no-install-recommends apt-utils \

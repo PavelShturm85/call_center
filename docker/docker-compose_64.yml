@@ -22,16 +22,28 @@ services:
       - redis
     restart: always
 
-  watchdog:
+  watcher:
     build:
       context: ../
       dockerfile: docker/django/django_64.Dockerfile
-    command: python docker/watchdog/run.py 
+    command: python docker/watcher/run.py 
     depends_on:
       - db
     volumes_from:
       - django
     restart: always
+
+  event_watcher:
+    build:
+      context: ../
+      dockerfile: docker/django/django_64.Dockerfile
+    command: python docker/event_watcher/run.py 
+    depends_on:
+      - db
+    volumes_from:
+      - django
+    restart: always
+
 
   db:
     image: postgres:9.5-alpine
@@ -71,5 +83,5 @@ services:
     volumes:
       - /crm
       - /usr/local/lib/python3.5/site-packages/django/
-      - /home/server/asterisk_media/monitor:/crm/call_center/crm/static/files/monitor
+      - /home/crm/asterisk_media/monitor:/crm/call_center/crm/static/files/monitor
     restart: always

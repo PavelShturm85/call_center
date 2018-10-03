@@ -22,11 +22,22 @@ services:
       - redis
     restart: always
 
-  watchdog:
+  watcher:
     build:
       context: ../
       dockerfile: docker/django/django_test.Dockerfile
-    command: python docker/watchdog/run.py 
+    command: python docker/watcher/run.py 
+    depends_on:
+      - db
+    volumes_from:
+      - django
+    restart: always
+
+  event_watcher:
+    build:
+      context: ../
+      dockerfile: docker/django/django_test.Dockerfile
+    command: python docker/event_watcher/run.py 
     depends_on:
       - db
     volumes_from:

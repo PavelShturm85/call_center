@@ -15,28 +15,24 @@ from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.core.mail import EmailMessage
 from django.utils import timezone
+from datetime import datetime, timedelta, date
 # Create your views here.
 
 
 @login_required(login_url='/accounts/login/')
 def call_list(request):
     call_list = Call.objects.all().order_by('-date_call')
-    form = CallsFilter(request.GET, queryset=call_list)
-    paginator = Paginator(form.qs, 20)
-    page = request.GET.get('page')
 
-    try:
-        calls = paginator.page(page)
-    except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
-        calls = paginator.page(1)
-    except EmptyPage:
-        # If page is out of range (e.g. 9999), deliver last page of results.
-        calls = paginator.page(paginator.num_pages)
+    request_copy = request.GET.copy()
+
+    if not request.GET:
+        date_end = timezone.now() - timedelta(days=7)
+        request_copy["date_call_0"] = date_end
+
+    form = CallsFilter(request_copy, queryset=call_list)
 
     return render_to_response(
         'crm/calls_list.html', {
-            'queryset': calls,
             'filter': form,
             'request': request,
             'settings': settings,

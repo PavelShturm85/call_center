@@ -20,11 +20,20 @@ services:
       - redis
     restart: always
 
-  watchdog:
+  watcher:
     build:
       context: ../
       dockerfile: docker/django/django_30.Dockerfile
-    command: python docker/watchdog/run.py 
+    command: python docker/watcher/run.py 
+    volumes_from:
+      - django
+    restart: always
+
+  event_watcher:
+    build:
+      context: ../
+      dockerfile: docker/django/django_30.Dockerfile
+    command: python docker/event_watcher/run.py 
     volumes_from:
       - django
     restart: always

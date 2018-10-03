@@ -10,12 +10,13 @@
 <div class="row">
     <div class="col-sm-0"></div>
 
-    <div class="col-sm-11 panel panel-primary" style="margin-left: 4%;">
-        {% load bootstrap3 %} {% bootstrap_pagination queryset %}
+    <div class="col-sm-11 panel panel-primary layer" style="margin-left: 4%;">
+        
         
         <table class="table table-striped">
             <thead>
                 <tr>
+                    <th>П/Н</th>
                     <th>Время звонка</th>
                     <th>Телефон</th>
                     <th>Фамилия</th>
@@ -30,12 +31,12 @@
                     </br>
                     <input class="btn btn-primary" type="submit" value="Фильтр" />
                     <tr>
-
+                        <th></th>
                         <th>{{filter.form.date_call}}</th>
                         <th>{{filter.form.client__phone_number}}</th>
                         <th>{{filter.form.client__surname}}</th>
-                        <th></th>
-                        <th></th>
+                        <th>{{filter.form.client__name}}</th>
+                        <th>{{filter.form.client__patronymic}}</th>
                         <th>{{filter.form.disposition}}</th>
                         <th>{{filter.form.login_name}}</th>
                         <th>{{filter.form.executor_task}}</th>
@@ -45,15 +46,18 @@
             </thead>
             <tbody class="paleblue" id="new_calls"></tbody>
             <tbody class="paleblue">
-                {% if queryset %} 
-                    {% for call in queryset %} 
+                 
+                    {% for call in filter.qs %} 
                         {% if call.task_completed_identifier %}
                         <tr class="success">
                         {% elif not call.task_completed_identifier and call.status_task%}
                         <tr class="warning">
+                        {% elif not call.task_completed_identifier and call.disposition == 'NO ANSWER' %}
+                        <tr style="background-color:rgb(228, 127, 127);">
                         {% else %}
                         <tr class="danger">
                         {% endif %}
+                            <td>{{ forloop.revcounter }}</td>
                             <td>{{ call.date_call}}</td>
                             <td>{{ call.client_phone}}</td>
                             <td>{{ call.client_surname}}</td>
@@ -83,7 +87,7 @@
                             
                             <td>
                                 {% if call.task_completed_identifier %} 
-                                Завершена 
+                                Завершено 
                                 {% else %} 
                                 Не завершена 
                                 {% endif %}
@@ -96,21 +100,17 @@
                         </tr>
 
                         {% endfor %} 
-                        {% endif %}
+                        
             </tbody>
         </table>
 
-        {% bootstrap_pagination queryset %}
+        
     </div>
 
     <div class="col-sm-1"></div>
 
 </div>
-<div class="row">
-    <div class="col-sm-0"></div>
-    <div class="col-sm-10" style="margin-left: 4%;">{{settings.VERSION}}</div>
-    <div class="col-sm-1"></div>
-</div>
+
 
 <script type="text/javascript">
     var id;
@@ -130,6 +130,7 @@
                 var refEdit = ref + dataDict.call_id
                 var trCall = ( 
                                 '<tr class="info">' +
+                                '<td></td>' +
                                 '<td>Активный звонок</td>' +
                                 '<td>' + dataDict.client_phone_number + '</td>' +
                                 '<td>' + dataDict.client_surname + '</td>' +
@@ -153,5 +154,11 @@
     }
     id = setInterval('newCall()', 1000);
 </script>
-
+<style>
+    .layer {
+     overflow: scroll; /* Добавляем полосы прокрутки */
+     height: 700px; /* Высота блока */
+     
+    } 
+   </style>
 {% endblock %}

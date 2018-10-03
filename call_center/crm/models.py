@@ -10,7 +10,7 @@ from django.utils import timezone
 class Client(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     phone_number = models.CharField(
-        max_length=12, verbose_name='Номер телефона с которого звонили')
+        max_length=12, verbose_name='Номер телефона с которого звонили', unique=True)
     surname = models.CharField(max_length=30, verbose_name='Фамилия клиента')
     name = models.CharField(max_length=30, verbose_name='Имя клиента')
     patronymic = models.CharField(
@@ -48,7 +48,7 @@ class Call(models.Model):
     dst_phone_number = models.CharField(
         max_length=12, verbose_name='Номер телефона куда звонили')
     unique_id = models.CharField(
-        max_length=50, verbose_name='Идентификатор активного звонка и истории')
+        max_length=50, verbose_name='Идентификатор активного звонка и истории', unique=True)
     # булевые статусы
     task_completed_identifier = models.BooleanField(
         default=False, verbose_name='Идентификатор завершенной задачи')
@@ -73,6 +73,14 @@ class Call(models.Model):
     @property
     def client_surname(self):
         return self.client.surname
+
+    @property
+    def duration(self):
+        if self.call_duration:
+            duration = self.call_duration.split(".")[0]
+        else:
+            duration = 0
+        return duration
 
     @property
     def path_to_file(self):
