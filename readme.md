@@ -137,8 +137,4 @@ $ sudo docker-compose -f docker-compose_<регион>.yml down --rmi all
 $ git pull
 
 $ sudo docker-compose -f docker-compose_<регион>.yml up -d
-```
-<<<<<<< HEAD
-=======
 
->>>>>>> 22e6b71cb1d2bf1b11898c1c63e6c534dc1a1691
